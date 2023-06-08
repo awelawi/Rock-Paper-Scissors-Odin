@@ -1,72 +1,134 @@
-// obtaining computer choice
-function getComputerChoice(){
-    const rock = "Rock"
-    const paper = "Paper"
-    const scissors = "Scissors"
+document.addEventListener("DOMContentLoaded", function(){
+    /**
+     * Defining  vars to keep score track
+     */
+    let computer_plays = 0;
+    let user_plays = 0;
+    let user_wins = 0;
+    let computer_wins = 0;
 
-    // obtaining a random number between 1 and 3
-    let number  = Math.floor(Math.random() * 3) + 1
-    if (number == 1){
-        return rock;
+    /**
+     * Retrieving the elements by their ID
+     *
+     * */
+    let current_tally = document.getElementById("current-status");
+    let rock_button = document.getElementById("rock-btn");
+    let paper_button = document.getElementById("paper-btn");
+    let scissors_button = document.getElementById("scissors-btn");
+    let user_plays_display = document.getElementById("user-number-of-plays");
+    let computer_plays_display = document.getElementById("computer-number-of-plays");
+    let winner = document.getElementById("declared-winner");
+
+    /**
+     * Button Event Listeners
+     */
+    rock_button.addEventListener("click", () => {
+        handlePlayerChoice("rock");
+    })
+
+    paper_button.addEventListener("click", () => {
+        handlePlayerChoice("paper");
+    })
+
+    scissors_button.addEventListener("click", () => {
+        handlePlayerChoice("scissors");
+    })
+
+    /**
+     * 
+     * @returns the computer's choice
+     */
+    function getComputerChoice () {
+        const rock = "rock"
+        const paper = "paper"
+        const scissors = "scissors"
+
+        // obtaining a random number between 1 and 3
+        let number = Math.floor(Math.random() * 3) + 1;
+        switch(number){
+        case 1:
+            return rock;
+        
+        case 2:
+            return paper;
+
+        case 3:
+            return scissors;
+        }
     }
 
-    else if(number == 2){
-        return paper;
+    /**
+     * This method takes in the player choice and sends it to the playRound function
+     * It also keeps track of how long the computer and user have been playing for using a helper fucntion: numberOfPlays
+     * @param {*} playerSelection 
+     */
+    function handlePlayerChoice(playerSelection){
+        if (numberOfPlays()){
+            console.log("We have come to the end of the game");
+            winner.textContent = whosTheWinner();
+            return;
+        }
+        let computerSelection = getComputerChoice();
+        result = playRound(playerSelection, computerSelection);
+        current_tally.textContent = `Current Status: ${result}`;
+        user_plays_display.textContent = `You have played a total of ${user_plays}`;
+        computer_plays_display.textContent = `The computer has played a total of ${computer_plays}`;
     }
 
-    else{
-        return scissors;
-    }
-}
-console.log(getComputerChoice())
-
-// round between computer and player
-function playRound(playerSelection, computerSelection){
-    playerSelection = playerSelection.toLowerCase();
-    computerSelection = computerSelection.toLowerCase();
-    var result = ""
-    if (playerSelection == computerSelection){
-        result = "It's a tie we have " + playerSelection + " and "+computerSelection
-    }
-
-    else if((playerSelection == "rock") && (computerSelection == "scissors")){
-        result = "You win "+playerSelection+ " beats "+computerSelection
-    }
-
-    else if((playerSelection == "paper") && (computerSelection == "rock")){
-        result = "You win "+playerSelection+ " beats "+computerSelection
-    }
-
-    else if((playerSelection == "scissors") && (computerSelection == "scissors")){
-        result = "You win " + playerSelection + " beats " + computerSelection
-    }
-
-    else{
-        result = "You lose " +computerSelection+ " beats "+playerSelection
-    }
-
-    return result
-}
-// playing 5 rounds of the game
-function game(){
-    plays = 1
-    player_wins = 0
-    ties = 0
-    while (plays <= 5){
-        var computer_choice = getComputerChoice()
-        console.log("We're playing rock-paper-scissors")
-        var user_choice = prompt("Choose between rock/paper/scissors: ")
-        var result = playRound(user_choice, computer_choice)
-        if (result.includes("You win")){
-            player_wins++
+    /**
+     * Score Updates
+     */
+    function whosTheWinner(){
+        if (user_wins > computer_wins){
+            return `The user has won with a total of ${user_wins} wins`;
         }
 
-        else if(result.includes("tie")){
-            ties++
+        else{
+            return `Yikes you lost ://. The computer won by ${computer_wins} points`
         }
-        console.log(result)
-        plays++
     }
-    return(`You won ${player_wins} out of 5 games`)
-}
-console.log(game())
+    /**
+     * Returns true if the number of user and computer plays is 5
+     */
+    function numberOfPlays(){
+        if (computer_plays == 5 || user_plays == 5) {
+            return true
+        }
+        return false;
+    }
+
+    /**
+     * Plays round with the computer
+     * @param {*} playerSelection 
+     * @param {*} computerSelection 
+     * @returns String
+     */
+    function playRound (playerSelection, computerSelection) {
+        let result = "";
+        user_plays++;
+        computer_plays++;
+        if (playerSelection === computerSelection)  {
+            result = "It's a tie we have " + playerSelection + " and " + computerSelection;
+        }
+
+        if (
+            (playerSelection === "rock") && (computerSelection === "scissors") ||
+            (playerSelection === "paper") && (computerSelection === "rock") ||
+            (playerSelection === "scissors") && (computerSelection === "paper")
+            ) {
+            user_wins++;
+            result = "You win " + playerSelection + " beats " + computerSelection;
+        }
+
+        if (
+            (computerSelection === "rock") && (playerSelection === "scissors") ||
+            (computerSelection === "paper") && (playerSelection === "rock") ||
+            (computerSelection === "scissors") && (playerSelection === "paper")
+        ) {
+            computer_wins++;
+            result = "You lose " + computerSelection + " beats " + playerSelection;
+        }
+
+        return result;
+    }
+})
