@@ -1,0 +1,50 @@
+body{
+    background-color: #fb6f92;
+}
+
+div #opening-remark{
+    color: #ffe5ec;
+    text-align: center;
+    font-size: medium
+}
+#instruction{
+    text-align: center;
+    font-weight: bolder;
+    margin-bottom: 12px;
+    color: #ffb3c6
+}   
+
+#current-status{
+    color: #ffb3c6;
+    font-weight: bold;
+}
+
+#user-number-of-plays{
+    color: #ffb3c6;
+    font-weight: bold;
+}
+
+#computer-number-of-plays{
+    color: #ffb3c6;
+    font-weight: bold;
+}
+
+#declared-winner{
+    color:#ffb3c6;
+    font-weight: bold;
+}
+
+#current-score{
+    color: #ffb3c6;
+    font-weight: bold;
+}
+
+#button-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#button-container button{
+    margin: 5px;
+}
